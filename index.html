@@ -84,6 +84,24 @@
                     console.log('featureCollection', featureCollection);
                 })
 
+            d3.csv("data/green.csv")
+                .then(data => {
+
+                    const pins = data
+                        .map(pin => {
+                            const { X: lat, Y: lon, all } = pin
+                            return {
+                                "type": "Feature", "properties": { ...pin },
+                                "geometry": {
+                                    "type": "Point", "coordinates": [+lon, +lat]
+                                }
+                            }
+                        })
+                    const featureCollection = turf.featureCollection(pins)
+                    map.getSource("traffic_green").setData(featureCollection)
+                    console.log('featureCollection', featureCollection);
+                })
+
 
 
             map.addSource('traffic', {
@@ -122,6 +140,22 @@
                 },
             });
 
+            map.addSource('traffic_green', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': []
+                }
+            });
+            map.addLayer({
+                'id': 'traffic_green',
+                'type': 'circle',
+                'source': 'traffic_green',
+                'paint': {
+                    'circle-radius': 4,
+                    'circle-color': 'green'
+                },
+            });
 
             map.on('click', 'traffic', (e) => {
                 console.log('e', e);
