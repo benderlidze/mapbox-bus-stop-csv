@@ -84,12 +84,12 @@
                     console.log('featureCollection', featureCollection);
                 })
 
-            d3.csv("data/green.csv")
+            d3.csv("data/GoRaleigh Bus Stops (2).csv")
                 .then(data => {
 
                     const pins = data
                         .map(pin => {
-                            const { X: lat, Y: lon, all } = pin
+                            const { Y: lat, X: lon, all } = pin
                             return {
                                 "type": "Feature", "properties": { ...pin },
                                 "geometry": {
@@ -152,8 +152,10 @@
                 'type': 'circle',
                 'source': 'traffic_green',
                 'paint': {
-                    'circle-radius': 3,
-                    'circle-color': 'green'
+                    'circle-radius': 4,
+                    'circle-color': 'white',
+                    "circle-stroke-width": 1,
+                    "circle-stroke-color": "#000"
                 },
             });
 
