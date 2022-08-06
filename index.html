@@ -59,30 +59,30 @@
             container: 'map',
             style: 'mapbox://styles/mapbox/satellite-v9',
             center: { lng: -78.6542006885212, lat: 35.757000686731686 },
-            zoom: 7
+            zoom: 10
         });
 
         map.on('load', () => {
 
-            d3.csv("data/raw-data.csv")
-                .then(data => {
-                    console.log('Store', data);
+            // d3.csv("data/raw-data.csv")
+            //     .then(data => {
+            //         console.log('Store', data);
 
-                    const pins = data
-                        //.sort((a, b) => a.lat - b.lat)
-                        .map(pin => {
-                            const { X: lat, Y: lon, all } = pin
-                            return {
-                                "type": "Feature", "properties": { ...pin },
-                                "geometry": {
-                                    "type": "Point", "coordinates": [+lon, +lat]
-                                }
-                            }
-                        })
-                    const featureCollection = turf.featureCollection(pins)
-                    map.getSource("traffic").setData(featureCollection)
-                    console.log('featureCollection', featureCollection);
-                })
+            //         const pins = data
+            //             //.sort((a, b) => a.lat - b.lat)
+            //             .map(pin => {
+            //                 const { X: lat, Y: lon, all } = pin
+            //                 return {
+            //                     "type": "Feature", "properties": { ...pin },
+            //                     "geometry": {
+            //                         "type": "Point", "coordinates": [+lon, +lat]
+            //                     }
+            //                 }
+            //             })
+            //         const featureCollection = turf.featureCollection(pins)
+            //         map.getSource("traffic").setData(featureCollection)
+            //         console.log('featureCollection', featureCollection);
+            //     })
 
             d3.csv("data/GoRaleigh Bus Stops (2).csv")
                 .then(data => {
@@ -152,18 +152,18 @@
                 'type': 'circle',
                 'source': 'traffic_green',
                 'paint': {
-                    'circle-radius': 4,
-                    'circle-color': 'white',
-                    "circle-stroke-width": 1,
-                    "circle-stroke-color": "#000"
+                    'circle-radius': 5,
+                    'circle-color': 'red',
+                    // "circle-stroke-width": 1,
+                    // "circle-stroke-color": "#000"
                 },
             });
 
-            map.on('click', 'traffic', (e) => {
+            map.on('click', 'traffic_green', (e) => {
                 console.log('e', e);
                 // Copy coordinates array.
                 const text = e.features[0].properties;
-                const description = `${text['Stop ID']} ${text['Stop Name']}`
+                const description = `${text['Stop_ID']} ${text['Stop_Name']}`
                 new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
                     .setHTML(description)
@@ -173,12 +173,12 @@
             });
 
             // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'traffic', () => {
+            map.on('mouseenter', 'traffic_green', () => {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
             // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'traffic', () => {
+            map.on('mouseleave', 'traffic_green', () => {
                 map.getCanvas().style.cursor = '';
             });
 
