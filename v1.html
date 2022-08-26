@@ -198,14 +198,16 @@
 
         map.on('load', () => {
 
-            // d3.csv("data/raw-data.csv")
-            //     .then(data => {
-            //         console.log('Store', data);
+            // fetch("https://transit.cartigraph.com/api/get-bus-stop-list")
+            //     .then(data => data.json())
+            //     .then(json => {
+            //         console.log('json', json);
 
-            //         const pins = data
-            //             //.sort((a, b) => a.lat - b.lat)
+            //         autocomplete(input, json);
+
+            //         const pins = json.content
             //             .map(pin => {
-            //                 const { X: lat, Y: lon, all } = pin
+            //                 const { user_latitude: lat, user_longitude: lon } = pin
             //                 return {
             //                     "type": "Feature", "properties": { ...pin },
             //                     "geometry": {
@@ -214,20 +216,17 @@
             //                 }
             //             })
             //         const featureCollection = turf.featureCollection(pins)
-            //         map.getSource("traffic").setData(featureCollection)
+            //         map.getSource("traffic_green").setData(featureCollection)
             //         console.log('featureCollection', featureCollection);
             //     })
 
-            fetch("https://transit.cartigraph.com/api/get-bus-stop-list")
-                .then(data => data.json())
-                .then(json => {
-                    console.log('json', json);
+            d3.csv("data/GoRaleigh Bus Stops (2).csv")
+                .then(data => {
 
-                    autocomplete(input, json);
-
-                    const pins = json.content
+                    autocomplete(input, data);
+                    const pins = data
                         .map(pin => {
-                            const { user_latitude: lat, user_longitude: lon } = pin
+                            const { Y: lat, X: lon, all } = pin
                             return {
                                 "type": "Feature", "properties": { ...pin },
                                 "geometry": {
@@ -239,12 +238,6 @@
                     map.getSource("traffic_green").setData(featureCollection)
                     console.log('featureCollection', featureCollection);
                 })
-
-            // d3.csv("data/GoRaleigh Bus Stops (2).csv")
-            //     .then(data => {
-
-
-            //     })
 
 
 
@@ -307,7 +300,8 @@
                 console.log('e', e);
                 // Copy coordinates array.
                 const text = e.features[0].properties;
-                const description = `${text['bus_stop']} ${text['bus_stop_id']} `
+                // const description = `${text['bus_stop']} ${text['bus_stop_id']} `
+                const description = `${text['Stop_ID']} ${text['Stop_Name']}`
                 new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
                     .setHTML(description)
@@ -374,7 +368,7 @@
                 //     }
                 // })
                 console.log('data', data);
-                const arr = [...new Set(data.content.map(i => i.bus_stop_id))].map((i, key) => {
+                const arr = [...new Set(data.map(i => i.Stop_ID))].map((i, key) => {
                     return {
                         index: key,
                         text: `${i}`
@@ -410,15 +404,12 @@
                             // closeAllLists();
                             // const point = data[index]
                             // selectPoint(point)
-                            console.log('', index);
-                            console.log('', inp.value);
-                            const res = data.content.find(i => i.bus_stop_id === inp.value)
-                            console.log('res', res);
+                            const res = data.find(i => i.Stop_ID === inp.value)
 
                             if (res && res.user_latitude !== "") {
                                 map.flyTo({
-                                    center: [+res.user_longitude, +res.user_latitude],
-                                    zoom: 15
+                                    center: [+res.X, +res.Y],
+                                    zoom: 18
 
                                 })
                             }
