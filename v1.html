@@ -172,7 +172,7 @@
                 <div id="clear">
                     <div class="close-x"></div>
                 </div>
-                <input id="myInput" class="clearable" type="text" name="myCountry" placeholder="Search Town or City">
+                <input id="myInput" class="clearable" type="text" name="myCountry" placeholder="Search Stop ID">
             </div>
 
         </div>
@@ -187,6 +187,9 @@
         const input = document.getElementById("myInput")
         const shopName = document.getElementById("shop");
         const shopList = document.getElementById("shop-list");
+        const clearButton = document.getElementById("clear");
+
+
 
         mapboxgl.accessToken = 'pk.eyJ1Ijoic3VqYW5jaGFrcmFib3J0eSIsImEiOiJja2Q5MzBuc3owenplMnBzY2I0eDYwdDhvIn0.imItePLDlYNF2BGVde_mkw';
         const map = new mapboxgl.Map({
@@ -195,6 +198,11 @@
             center: { lng: -78.6542006885212, lat: 35.757000686731686 },
             zoom: 10
         });
+
+        clearButton.addEventListener("click", () => {
+            input.value = '';
+            map.panTo({ lng: -78.6542006885212, lat: 35.757000686731686 }, { zoom: 10 })
+        })
 
         map.on('load', () => {
 
