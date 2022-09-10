@@ -228,13 +228,13 @@
             //         console.log('featureCollection', featureCollection);
             //     })
 
-            d3.csv("data/GoRaleigh Bus Stops (2).csv")
+            d3.csv("data/GoRaleigh Final Report (V.2).csv")
                 .then(data => {
 
                     autocomplete(input, data);
                     const pins = data
                         .map(pin => {
-                            const { Y: lat, X: lon, all } = pin
+                            const { 'X Coordinate': lat, 'Y Coordinate': lon, all } = pin
                             return {
                                 "type": "Feature", "properties": { ...pin },
                                 "geometry": {
@@ -309,7 +309,7 @@
                 // Copy coordinates array.
                 const text = e.features[0].properties;
                 // const description = `${text['bus_stop']} ${text['bus_stop_id']} `
-                const description = `${text['Stop_ID']} ${text['Stop_Name']}`
+                const description = `${text['Stop ID']} ${text['Stop Name']}`
                 new mapboxgl.Popup()
                     .setLngLat(e.lngLat)
                     .setHTML(description)
